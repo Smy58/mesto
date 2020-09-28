@@ -1,0 +1,18 @@
+.footer{
+    width: 882px;
+    margin: 46px auto 60px auto;
+    font-family: Inter;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 22px;
+    
+    color: #545454;
+}
+
+@media screen and (max-width: 1023px){
+    .footer{
+        width: 68.9%;
+        justify-content: space-around;
+    }
+}
