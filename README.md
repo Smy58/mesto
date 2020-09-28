@@ -19,4 +19,4 @@
 ## GitHub проекты
 -----------------
 
-Данный проект имеется на странице [GitHub](https://smy58.github.io/russian-travel/)
+Данный проект имеется на странице [GitHub](https://smy58.github.io/mesto/)
