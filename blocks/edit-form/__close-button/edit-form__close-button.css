@@ -16,8 +16,8 @@
 
 @media screen and (max-width: 940px){
     .edit-form__close-button{
-        top: 73px;
-        transform: translate(calc(-50% + 125px), 0);
+        top: 50%;
+        transform: translate(calc(-50% + 125px), calc(-50% - 170px));
         width: 37px;
         height: 37px;
     }

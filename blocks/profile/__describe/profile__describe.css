@@ -1,5 +1,10 @@
 .profile__describe{
-    font-family: Inter;
+    max-width: 85%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    
+    font-family: Inter, "Arial", sans-serif;
     font-style: normal;
     font-weight: normal;
     font-size: 18px;
