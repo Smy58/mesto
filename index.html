@@ -8,7 +8,7 @@
 </head>
 <body class="page">
     <header class="header">
-        <img src="./images/logo.png" alt="Лого" class="logo">
+        <img src="./images/logo.svg" alt="Логотип" class="logo">
     </header>
     <main>
         <div class="profile">
@@ -18,14 +18,14 @@
                     <div class="profile__text">
                         <h2 class="profile__full-name">Жак-Ив Кусто</h2>
                         <button class="profile__edit-button" type="button">
-                            <img src="images/Ручка.png" alt="Ручка">                    
+                            <img src="images/Ручка.svg" alt="Ручка">                    
                         </button>
                     </div>
                     <p class="profile__describe">Исследователь океана</p>
                 </div>
             </div>
             <button class="profile__add-button" type="button">
-                <img src="images/plus.png" alt="Плюс">
+                <img src="images/plus.svg" alt="Плюс">
             </button>
         </div>
         <div class="elements">
@@ -34,7 +34,7 @@
                 <div class="element__describe">
                     <h3 class="element__text">Item 1 Item 1 Item 1 Item 1</h3>
                     <button class="element__like-button" type="button">
-                        <img src="images/like.jpg" alt="Лайк">
+                        <img src="images/like.svg" alt="Лайк">
                     </button>  
                 </div>
             </div>
@@ -43,7 +43,7 @@
                 <div class="element__describe">
                     <h3 class="element__text">Item 2</h3>
                     <button class="element__like-button" type="button">
-                        <img src="images/like.jpg" alt="Лайк">
+                        <img src="images/like.svg" alt="Лайк">
                     </button>  
                 </div>
             </div>
@@ -52,7 +52,7 @@
                 <div class="element__describe">
                     <h3 class="element__text">Item 3 </h3>
                     <button class="element__like-button" type="button">
-                        <img src="images/like.jpg" alt="Лайк">
+                        <img src="images/like.svg" alt="Лайк">
                     </button>  
                 </div>
             </div>
@@ -61,7 +61,7 @@
                 <div class="element__describe">
                     <h3 class="element__text">Item 4</h3>
                     <button class="element__like-button" type="button">
-                        <img src="images/like.jpg" alt="Лайк">
+                        <img src="images/like.svg" alt="Лайк">
                     </button>  
                 </div>
             </div>
@@ -70,7 +70,7 @@
                 <div class="element__describe">
                     <h3 class="element__text">Item 5</h3>
                     <button class="element__like-button" type="button">
-                        <img src="images/like.jpg" alt="Лайк">
+                        <img src="images/like.svg" alt="Лайк">
                     </button>  
                 </div>
             </div>
@@ -79,7 +79,7 @@
                 <div class="element__describe">
                     <h3 class="element__text">Item 6</h3>
                     <button class="element__like-button" type="button">
-                        <img src="images/like.jpg" alt="Лайк">
+                        <img src="images/like.svg" alt="Лайк">
                     </button>  
                 </div>
             </div>
@@ -91,15 +91,14 @@
     </footer>
 
     <div class="edit-form edit-form_view_hidden">
-        <div class="edit-form__overlay"></div>
-        <button class="edit-form__close-button">
-            <img src="./images/Close-Icon.png" alt="Закрыть" class="edit-form__close-icon">
-        </button>
         <form class="form" name="bio">
+            <button class="form__close-button" type="button">
+                <img src="./images/Close-Icon.svg" alt="Закрыть" class="form__close-icon">
+            </button>
             <h3 class="form__title">Редактировать профиль</h3>
             <input id="full-name" name="full-name" class="form__input" type="text" value="Жак-Ив Кусто">
             <input id="bio" name="bio" class="form__input" type="text" value="Исследователь океана">
-            <button class="form__submit" type="button">Сохранить</button>
+            <button class="form__submit" type="submit">Сохранить</button>
         </form>
     </div>
     <script src="./script/script.js"></script>

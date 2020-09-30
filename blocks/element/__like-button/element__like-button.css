@@ -7,3 +7,7 @@
 .element__like-button:focus{
     outline: none;
 }
+
+.element__like-button:hover{
+    opacity: 0.7;
+}

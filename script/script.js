@@ -1,6 +1,6 @@
-let submitButton = document.querySelector(".form__submit");
+let form = document.querySelector(".form");
 let editButton = document.querySelector(".profile__edit-button");
-let closeButton = document.querySelector(".edit-form__close-icon");
+let closeButton = document.querySelector(".form__close-icon");
 
 let editForm = document.querySelector('.edit-form');
 
@@ -10,7 +10,9 @@ let inputDescribe = document.getElementById('bio');
 let name = document.querySelector('.profile__full-name');
 let describe = document.querySelector('.profile__describe');
 
-function submit(){
+function submit(evt){
+    evt.preventDefault();
+
     name.textContent = inputName.value;
     describe.textContent = inputDescribe.value;
 
@@ -29,6 +31,6 @@ function closeForm(){
     editForm.classList.add('edit-form_view_hidden');
 }
 
-submitButton.addEventListener('click', submit);
+form.addEventListener('submit', submit, false);
 editButton.addEventListener('click', openEditForm);
 closeButton.addEventListener('click', closeForm);
