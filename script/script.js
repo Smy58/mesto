@@ -1,91 +1,71 @@
-let formTypeEdit = document.querySelector(".form_type_edit");
-let formTypeAdd = document.querySelector(".form_type_add");
+function openPopup(popupElement){
+    popupElement.classList.add('popup_opened');
+}
+function closePopup(popupElement){
+    popupElement.classList.remove('popup_opened');
+}
 
-let editButton = document.querySelector(".profile__edit-button");
-let addButton = document.querySelector(".profile__add-button");
 
-let editForm = document.querySelector('.edit-form');
-let addForm = document.querySelector('.add-form');
-
-let closeButtonEditForm = editForm.querySelector(".form__close-icon");
-let closeButtonAddForm = addForm.querySelector(".form__close-icon");
-
-let inputName = document.getElementById('full-name');
-let inputDescribe = document.getElementById('bio');
-
-let inputPostName = document.getElementById('postName');
-let inputPostLink = document.getElementById('postLink');
+//EDIT
+const editForm = document.querySelector('.popup_type_edit-form')
+const editButton = document.querySelector(".profile__edit-button");
 
 let name = document.querySelector('.profile__full-name');
 let describe = document.querySelector('.profile__describe');
 
+editButton.addEventListener('click', function(){
+    openPopup(editForm);
+    document.getElementById('full-name').value = name.textContent;
+    document.getElementById('bio').value = describe.textContent;
+});
+
+editForm.querySelector(".form__close-icon").addEventListener('click', function(){
+    closePopup(editForm);
+});
+
 function submitEditForm(evt){
     evt.preventDefault();
 
-    name.textContent = inputName.value;
-    describe.textContent = inputDescribe.value;
+    name.textContent = document.getElementById('full-name').value;
+    describe.textContent = document.getElementById('bio').value;
 
-    editForm.classList.add('edit-form_view_hidden');
+    closePopup(document.querySelector(".popup_type_edit-form"));
     console.log("close and save");
 }
 
+document.querySelector(".popup_type_edit-form").addEventListener('submit', submitEditForm, false);
+
+//ADD
+const addButton = document.querySelector(".profile__add-button");
+const addForm = document.querySelector('.popup_type_add-form');
+
+addButton.addEventListener('click', function(){
+    openPopup(document.querySelector('.popup_type_add-form'));
+    document.getElementById('postName').value = "Название";
+    document.getElementById('postLink').value = "Ссылка на картинку";
+});
+
+const closeButtonAddForm = addForm.querySelector(".form__close-icon");
+
+closeButtonAddForm.addEventListener('click', function(){
+    closePopup(document.querySelector('.popup_type_add-form'));
+});
+
+document.querySelector('.popup_type_add-form').addEventListener('submit', submitAddForm, false);
+
 function submitAddForm(evt){
     evt.preventDefault();
-
-    let item = {
-        name: inputPostName.value,
-        link: inputPostLink.value
+    console.log("TRUE");
+    const item = {
+        name: document.getElementById('postName').value,
+        link: document.getElementById('postLink').value
     }
 
     addElement(item);    
 
-    addForm.classList.add('add-form_view_hidden');
+    closePopup(document.querySelector(".popup_type_add-form"));
     console.log("close and save");
 }
-
-function openEditForm(){
-    editForm.classList.remove('edit-form_view_hidden');
-
-    inputName.value = name.textContent;
-    inputDescribe.value = describe.textContent;
-}
-
-function openAddForm(){
-    addForm.classList.remove('add-form_view_hidden');
-
-    inputPostName.value = "Название";
-    inputPostLink.value = "Ссылка на картинку";
-}
-
-function openPhotoForm(item){
-    const photoForm = document.querySelector('.photo-form');
-    photoForm.classList.remove('photo-form_view_hidden');
-
-    photoForm.querySelector('.photo-fullsize__image').src = item.link;
-    photoForm.querySelector('.photo-fullsize__describe').textContent = item.name;
-
-    photoForm.querySelector('.photo-fullsize__close-icon').addEventListener('click', function(){
-        photoForm.classList.add('photo-form_view_hidden');
-    });
-}
-
-function closeEditForm(){
-    editForm.classList.add('edit-form_view_hidden');
-}
-
-function closeAddForm(){
-    addForm.classList.add('add-form_view_hidden');
-}
-
-
-
-formTypeEdit.addEventListener('submit', submitEditForm, false);
-formTypeAdd.addEventListener('submit', submitAddForm, false);
-
-editButton.addEventListener('click', openEditForm);
-addButton.addEventListener('click', openAddForm);
-closeButtonEditForm.addEventListener('click', closeEditForm);
-closeButtonAddForm.addEventListener('click', closeAddForm);
 
 const initialCards = [
     {
@@ -119,6 +99,10 @@ let elements = document.querySelector('.elements');
 initialCards.forEach(addElement);
 
 function addElement(item){
+    elements.prepend(createElement(item));
+}
+
+function createElement(item){
     const elementTemplate = document.querySelector('#element-template').content;
     const elem = elementTemplate.cloneNode(true);
 
@@ -139,21 +123,23 @@ function addElement(item){
         post.remove();
     });
 
+    //Full-size
+
     const fullSizeButton = elem.querySelector('.element__button-image');
 
     fullSizeButton.addEventListener('click', function(){
-        const photoForm = document.querySelector('.photo-form');
-        photoForm.classList.remove('photo-form_view_hidden');
+        const photoForm = document.querySelector('.popup_type_photo-form');
+        openPopup(photoForm);
 
         photoForm.querySelector('.photo-fullsize__image').src = item.link;
         photoForm.querySelector('.photo-fullsize__describe').textContent = item.name;
 
         photoForm.querySelector('.photo-fullsize__close-icon').addEventListener('click', function(){
-            photoForm.classList.add('photo-form_view_hidden');
+            closePopup(photoForm);
         });
         
     });
 
-    elements.prepend(elem);
+    return elem;
 }
 

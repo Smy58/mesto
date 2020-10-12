@@ -52,3 +52,6 @@
 @import url(../blocks/photo-fullsize/__close-icon/photo-fullsize__close-icon.css);
 @import url(../blocks/photo-fullsize/__image/photo-fullsize__image.css);
 @import url(../blocks/photo-fullsize/__describe/photo-fullsize__describe.css);
+
+@import url(../blocks/popup/popup.css);
+@import url(../blocks/popup/_opened/popup_opened.css);
