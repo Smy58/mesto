@@ -10,8 +10,8 @@ function closePopup(popupElement){
 const editForm = document.querySelector('.popup_type_edit-form')
 const editButton = document.querySelector(".profile__edit-button");
 
-let name = document.querySelector('.profile__full-name');
-let describe = document.querySelector('.profile__describe');
+const name = document.querySelector('.profile__full-name');
+const describe = document.querySelector('.profile__describe');
 
 editButton.addEventListener('click', function(){
     openPopup(editForm);
@@ -34,38 +34,6 @@ function submitEditForm(evt){
 }
 
 document.querySelector(".popup_type_edit-form").addEventListener('submit', submitEditForm, false);
-
-//ADD
-const addButton = document.querySelector(".profile__add-button");
-const addForm = document.querySelector('.popup_type_add-form');
-
-addButton.addEventListener('click', function(){
-    openPopup(document.querySelector('.popup_type_add-form'));
-    document.getElementById('postName').value = "Название";
-    document.getElementById('postLink').value = "Ссылка на картинку";
-});
-
-const closeButtonAddForm = addForm.querySelector(".form__close-icon");
-
-closeButtonAddForm.addEventListener('click', function(){
-    closePopup(document.querySelector('.popup_type_add-form'));
-});
-
-document.querySelector('.popup_type_add-form').addEventListener('submit', submitAddForm, false);
-
-function submitAddForm(evt){
-    evt.preventDefault();
-    console.log("TRUE");
-    const item = {
-        name: document.getElementById('postName').value,
-        link: document.getElementById('postLink').value
-    }
-
-    addElement(item);    
-
-    closePopup(document.querySelector(".popup_type_add-form"));
-    console.log("close and save");
-}
 
 const initialCards = [
     {
@@ -94,17 +62,9 @@ const initialCards = [
     }
 ];
 
-let elements = document.querySelector('.elements');
-
-initialCards.forEach(addElement);
-
-function addElement(item){
-    elements.prepend(createElement(item));
-}
-
 function createElement(item){
     const elementTemplate = document.querySelector('#element-template').content;
-    const elem = elementTemplate.cloneNode(true);
+    const elem = elementTemplate.querySelector('.element').cloneNode(true);
 
     elem.querySelector('.element__image').src = item.link;
     elem.querySelector('.element__text').textContent = item.name;
@@ -143,3 +103,43 @@ function createElement(item){
     return elem;
 }
 
+function addElement(item, elementsList){
+    elementsList.prepend(createElement(item));
+    //console.log(elementsList);
+}
+
+initialCards.forEach(function(item){
+    addElement(item, document.querySelector('.elements'));
+});
+
+//ADD
+const addButton = document.querySelector(".profile__add-button");
+const addForm = document.querySelector('.popup_type_add-form');
+
+addButton.addEventListener('click', function(){
+    openPopup(document.querySelector('.popup_type_add-form'));
+    document.getElementById('postName').value = "Название";
+    document.getElementById('postLink').value = "Ссылка на картинку";
+});
+
+const closeButtonAddForm = addForm.querySelector(".form__close-icon");
+
+closeButtonAddForm.addEventListener('click', function(){
+    closePopup(document.querySelector('.popup_type_add-form'));
+});
+
+document.querySelector('.popup_type_add-form').addEventListener('submit', submitAddForm, false);
+
+function submitAddForm(evt){
+    evt.preventDefault();
+    console.log("TRUE");
+    const item = {
+        name: document.getElementById('postName').value,
+        link: document.getElementById('postLink').value
+    }
+
+    addElement(item, document.querySelector('.elements'));    
+
+    closePopup(document.querySelector(".popup_type_add-form"));
+    console.log("close and save");
+}
