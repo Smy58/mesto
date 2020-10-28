@@ -83,13 +83,15 @@ function keyHandler(evt){
 
 function openPopup(popupElement){
     popupElement.classList.add('popup_opened');
-    const formElement = popupElement.querySelector('.form');
-    const inputList = Array.from(formElement.querySelectorAll('.form__input'));
-    const buttonElement = formElement.querySelector('.form__submit');
-    inputList.forEach(function(item){
-        console.log(item.value);
-    });
-    toggleButtonState(inputList, buttonElement);
+    if(popupElement.classList.contains('popup_type_edit-form') || popupElement.classList.contains('popup_type_add-form')){
+        const formElement = popupElement.querySelector('.form');
+        const inputList = Array.from(formElement.querySelectorAll('.form__input'));
+        const buttonElement = formElement.querySelector('.form__submit');
+        inputList.forEach(function(item){
+            console.log(item.value);
+        });
+        toggleButtonState(inputList, buttonElement);
+    }
 
     document.body.addEventListener('keydown', keyHandler);
     
