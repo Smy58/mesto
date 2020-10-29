@@ -14,21 +14,24 @@ function handleKeyDown(popupElement){
 
 function openPopup(popupElement, allClasses){
     popupElement.classList.add('popup_opened');
-    if(popupElement.classList.contains('popup_type_edit-form') || popupElement.classList.contains('popup_type_add-form')){
-        const formElement = popupElement.querySelector('.form');
-        const inputList = Array.from(formElement.querySelectorAll('.form__input'));
-        const buttonElement = formElement.querySelector('.form__submit');
-        
-        toggleButtonState(inputList, buttonElement, allClasses);
-    }
 
     document.body.addEventListener('keydown', handleKeyDown(popupElement));
-    
-    popupElement.addEventListener('click', function(evt){
+}
+
+document.querySelectorAll('.popup').forEach(function(item){
+    item.addEventListener('click', function(evt){
         if(evt.target.classList.contains('popup')){
-            closePopup(popupElement);
+            closePopup(item);
         }
-    })
+    });
+})
+
+function refreshSubmitButton(popupElement){
+    const formElement = popupElement.querySelector('.form');
+    const inputList = Array.from(formElement.querySelectorAll('.form__input'));
+    const buttonElement = formElement.querySelector('.form__submit');
+    
+    toggleButtonState(inputList, buttonElement, allClasses);
 }
 
 //EDIT
@@ -39,9 +42,11 @@ const name = document.querySelector('.profile__full-name');
 const describe = document.querySelector('.profile__describe');
 
 editButton.addEventListener('click', function(){
-    openPopup(editForm, allClasses);
     document.getElementById('full-name-input').value = name.textContent;
     document.getElementById('bio-input').value = describe.textContent;
+    openPopup(editForm, allClasses);
+    refreshSubmitButton(editForm);
+    
 });
 
 editForm.querySelector(".form__close-icon").addEventListener('click', function(){
@@ -145,6 +150,7 @@ addButton.addEventListener('click', function(){
     document.getElementById('postName-input').value = "";
     document.getElementById('postLink-input').value = "";
     openPopup(document.querySelector('.popup_type_add-form'), allClasses);
+    refreshSubmitButton(addForm);
 });
 
 const closeButtonAddForm = addForm.querySelector(".form__close-icon");
