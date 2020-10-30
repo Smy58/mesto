@@ -5,6 +5,7 @@
     align-items: center;
     width: fit-content;
     margin: 0 auto 0 auto;
+    margin-bottom: 29px;
 }
 
 .form__field:first-of-type{
@@ -12,5 +13,5 @@
 }
 
 .form__field:last-of-type{
-    margin-bottom: 19px;
+    margin-bottom: 48px;
 }

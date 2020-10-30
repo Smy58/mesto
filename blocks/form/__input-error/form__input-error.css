@@ -3,7 +3,7 @@
     color: red;
     opacity: 0;
     position: absolute;
-    bottom: 10px;
+    top: 33px;
     left: 0;
     transition: 0.3s;
 }

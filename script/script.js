@@ -26,11 +26,15 @@ document.querySelectorAll('.popup').forEach(function(item){
     });
 })
 
-function refreshSubmitButton(popupElement){
+function refreshValidate(popupElement){
     const formElement = popupElement.querySelector('.form');
     const inputList = Array.from(formElement.querySelectorAll('.form__input'));
     const buttonElement = formElement.querySelector('.form__submit');
     
+    inputList.forEach(function(inputElement){
+        checkInputValidity(formElement, inputElement, allClasses);
+    });
+
     toggleButtonState(inputList, buttonElement, allClasses);
 }
 
@@ -45,7 +49,7 @@ editButton.addEventListener('click', function(){
     document.getElementById('full-name-input').value = name.textContent;
     document.getElementById('bio-input').value = describe.textContent;
     openPopup(editForm, allClasses);
-    refreshSubmitButton(editForm);
+    refreshValidate(editForm);
     
 });
 
@@ -59,11 +63,11 @@ function submitEditForm(evt){
     name.textContent = document.getElementById('full-name-input').value;
     describe.textContent = document.getElementById('bio-input').value;
 
-    closePopup(document.querySelector(".popup_type_edit-form"));
+    closePopup(editForm);
     console.log("close and save");
 }
 
-document.querySelector(".popup_type_edit-form").addEventListener('submit', submitEditForm, false);
+editForm.addEventListener('submit', submitEditForm, false);
 
 const initialCards = [
     {
@@ -148,18 +152,18 @@ const addForm = document.querySelector('.popup_type_add-form');
 
 addButton.addEventListener('click', function(){
     document.getElementById('postName-input').value = "";
-    document.getElementById('postLink-input').value = "";
-    openPopup(document.querySelector('.popup_type_add-form'), allClasses);
-    refreshSubmitButton(addForm);
+    document.getElementById('postLink-input').value = "Не ссылка";
+    openPopup(addForm, allClasses);
+    refreshValidate(addForm);
 });
 
 const closeButtonAddForm = addForm.querySelector(".form__close-icon");
 
 closeButtonAddForm.addEventListener('click', function(){
-    closePopup(document.querySelector('.popup_type_add-form'));
+    closePopup(addForm);
 });
 
-document.querySelector('.popup_type_add-form').addEventListener('submit', submitAddForm, false);
+addForm.addEventListener('submit', submitAddForm, false);
 
 function submitAddForm(evt){
     evt.preventDefault();
@@ -171,7 +175,7 @@ function submitAddForm(evt){
 
     addElement(item, document.querySelector('.elements'));    
 
-    closePopup(document.querySelector(".popup_type_add-form"));
+    closePopup(addForm);
     console.log("close and save");
 }
 
