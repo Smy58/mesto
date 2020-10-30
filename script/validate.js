@@ -32,13 +32,13 @@ const checkInputValidity = (formElement, inputElement, allClasses) => {
     }
 };
 
-function hasInvalidInput(inputList){
+const hasInvalidInput = (inputList) =>{
     return inputList.some(function(input){
       return !input.validity.valid;
     });
 }
 
-function toggleButtonState(inputList, buttonElement, allClasses){
+const toggleButtonState = (inputList, buttonElement, allClasses) =>{
     console.log(" che che " + allClasses.submitButtonDisabled);
     if(hasInvalidInput(inputList)){
       buttonElement.classList.add(allClasses.submitButtonDisabled);

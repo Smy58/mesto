@@ -1,73 +1,8 @@
-
-function closePopup(popupElement){
-    popupElement.classList.remove('popup_opened');
-    document.body.removeEventListener('keydown', handleKeyDown);
-}
-
-function handleKeyDown(popupElement){
-    return function(evt){
-        if(evt.key === 'Escape'){
-            closePopup(popupElement);
-        }
-    }
-}
-
-function openPopup(popupElement, allClasses){
-    popupElement.classList.add('popup_opened');
-
-    document.body.addEventListener('keydown', handleKeyDown(popupElement));
-}
-
-document.querySelectorAll('.popup').forEach(function(item){
-    item.addEventListener('click', function(evt){
-        if(evt.target.classList.contains('popup')){
-            closePopup(item);
-        }
-    });
-})
-
-function refreshValidate(popupElement){
-    const formElement = popupElement.querySelector('.form');
-    const inputList = Array.from(formElement.querySelectorAll('.form__input'));
-    const buttonElement = formElement.querySelector('.form__submit');
-    
-    inputList.forEach(function(inputElement){
-        checkInputValidity(formElement, inputElement, allClasses);
-    });
-
-    toggleButtonState(inputList, buttonElement, allClasses);
-}
-
-//EDIT
 const editForm = document.querySelector('.popup_type_edit-form')
 const editButton = document.querySelector(".profile__edit-button");
 
 const name = document.querySelector('.profile__full-name');
 const describe = document.querySelector('.profile__describe');
-
-editButton.addEventListener('click', function(){
-    document.getElementById('full-name-input').value = name.textContent;
-    document.getElementById('bio-input').value = describe.textContent;
-    openPopup(editForm, allClasses);
-    refreshValidate(editForm);
-    
-});
-
-editForm.querySelector(".form__close-icon").addEventListener('click', function(){
-    closePopup(editForm);
-});
-
-function submitEditForm(evt){
-    evt.preventDefault();
-
-    name.textContent = document.getElementById('full-name-input').value;
-    describe.textContent = document.getElementById('bio-input').value;
-
-    closePopup(editForm);
-    console.log("close and save");
-}
-
-editForm.addEventListener('submit', submitEditForm, false);
 
 const initialCards = [
     {
@@ -95,6 +30,52 @@ const initialCards = [
         link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
     }
 ];
+
+const addButton = document.querySelector(".profile__add-button");
+const addForm = document.querySelector('.popup_type_add-form');
+
+const closeButtonAddForm = addForm.querySelector(".form__close-icon");
+
+function closePopup(popupElement){
+    popupElement.classList.remove('popup_opened');
+    document.body.removeEventListener('keydown', handleKeyDown);
+}
+
+function handleKeyDown(popupElement){
+    return function(evt){
+        if(evt.key === 'Escape'){
+            closePopup(popupElement);
+        }
+    }
+}
+
+function openPopup(popupElement, allClasses){
+    popupElement.classList.add('popup_opened');
+
+    document.body.addEventListener('keydown', handleKeyDown(popupElement));
+}
+
+function refreshValidate(popupElement){
+    const formElement = popupElement.querySelector('.form');
+    const inputList = Array.from(formElement.querySelectorAll('.form__input'));
+    const buttonElement = formElement.querySelector('.form__submit');
+    
+    inputList.forEach(function(inputElement){
+        checkInputValidity(formElement, inputElement, allClasses);
+    });
+
+    toggleButtonState(inputList, buttonElement, allClasses);
+}
+
+function submitEditForm(evt){
+    evt.preventDefault();
+
+    name.textContent = document.getElementById('full-name-input').value;
+    describe.textContent = document.getElementById('bio-input').value;
+
+    closePopup(editForm);
+    console.log("close and save");
+}
 
 function createElement(item){
     const elementTemplate = document.querySelector('#element-template').content;
@@ -142,29 +123,6 @@ function addElement(item, elementsList){
     //console.log(elementsList);
 }
 
-initialCards.forEach(function(item){
-    addElement(item, document.querySelector('.elements'));
-});
-
-//ADD
-const addButton = document.querySelector(".profile__add-button");
-const addForm = document.querySelector('.popup_type_add-form');
-
-addButton.addEventListener('click', function(){
-    document.getElementById('postName-input').value = "";
-    document.getElementById('postLink-input').value = "Не ссылка";
-    openPopup(addForm, allClasses);
-    refreshValidate(addForm);
-});
-
-const closeButtonAddForm = addForm.querySelector(".form__close-icon");
-
-closeButtonAddForm.addEventListener('click', function(){
-    closePopup(addForm);
-});
-
-addForm.addEventListener('submit', submitAddForm, false);
-
 function submitAddForm(evt){
     evt.preventDefault();
     console.log("TRUE");
@@ -179,3 +137,43 @@ function submitAddForm(evt){
     console.log("close and save");
 }
 
+
+document.querySelectorAll('.popup').forEach(function(item){
+    item.addEventListener('click', function(evt){
+        if(evt.target.classList.contains('popup')){
+            closePopup(item);
+        }
+    });
+});
+
+editButton.addEventListener('click', function(){
+    document.getElementById('full-name-input').value = name.textContent;
+    document.getElementById('bio-input').value = describe.textContent;
+    openPopup(editForm, allClasses);
+    refreshValidate(editForm);
+    
+});
+
+editForm.querySelector(".form__close-icon").addEventListener('click', function(){
+    closePopup(editForm);
+});
+
+editForm.addEventListener('submit', submitEditForm, false);
+
+
+initialCards.forEach(function(item){
+    addElement(item, document.querySelector('.elements'));
+});
+
+addButton.addEventListener('click', function(){
+    document.getElementById('postName-input').value = "";
+    document.getElementById('postLink-input').value = "Не ссылка";
+    openPopup(addForm, allClasses);
+    refreshValidate(addForm);
+});
+
+closeButtonAddForm.addEventListener('click', function(){
+    closePopup(addForm);
+});
+
+addForm.addEventListener('submit', submitAddForm, false);
