@@ -55,18 +55,6 @@ function openPopup(popupElement, allClasses){
     document.body.addEventListener('keydown', handleKeyDown(popupElement));
 }
 
-function refreshValidate(popupElement){
-    const formElement = popupElement.querySelector('.form');
-    const inputList = Array.from(formElement.querySelectorAll('.form__input'));
-    const buttonElement = formElement.querySelector('.form__submit');
-    
-    inputList.forEach(function(inputElement){
-        checkInputValidity(formElement, inputElement, allClasses);
-    });
-
-    toggleButtonState(inputList, buttonElement, allClasses);
-}
-
 function submitEditForm(evt){
     evt.preventDefault();
 
@@ -77,45 +65,12 @@ function submitEditForm(evt){
     console.log("close and save");
 }
 
+
+
 function createElement(item){
-    const elementTemplate = document.querySelector('#element-template').content;
-    const elem = elementTemplate.querySelector('.element').cloneNode(true);
-
-    elem.querySelector('.element__image').src = item.link;
-    elem.querySelector('.element__text').textContent = item.name;
-
-    const likeButton = elem.querySelector('.element__like-button');
-
-    likeButton.addEventListener('click', function(evt){
-        evt.target.classList.toggle('element__like-button_isActive_true');
-    });
-
-    const deleteButton = elem.querySelector('.element__trash');
-
-    deleteButton.addEventListener('click', function (){
-        const post = deleteButton.closest('.element');
-
-        post.remove();
-    });
-
-    //Full-size
-
-    const fullSizeButton = elem.querySelector('.element__button-image');
-
-    fullSizeButton.addEventListener('click', function(){
-        const photoForm = document.querySelector('.popup_type_photo-form');
-        openPopup(photoForm, allClasses);
-
-        photoForm.querySelector('.photo-fullsize__image').src = item.link;
-        photoForm.querySelector('.photo-fullsize__describe').textContent = item.name;
-
-        photoForm.querySelector('.photo-fullsize__close-icon').addEventListener('click', function(){
-            closePopup(photoForm);
-        });
-        
-    });
-
-    return elem;
+    const card = new Card(item.name, item.link);
+    //console.log(card.returnTemplate());
+    return card.returnTemplate();
 }
 
 function addElement(item, elementsList){
@@ -150,7 +105,7 @@ editButton.addEventListener('click', function(){
     document.getElementById('full-name-input').value = name.textContent;
     document.getElementById('bio-input').value = describe.textContent;
     openPopup(editForm, allClasses);
-    refreshValidate(editForm);
+    //refreshValidate(editForm);
     
 });
 
@@ -169,7 +124,7 @@ addButton.addEventListener('click', function(){
     document.getElementById('postName-input').value = "";
     document.getElementById('postLink-input').value = "Не ссылка";
     openPopup(addForm, allClasses);
-    refreshValidate(addForm);
+    //refreshValidate(addForm);
 });
 
 closeButtonAddForm.addEventListener('click', function(){
