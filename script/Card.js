@@ -2,11 +2,17 @@ class Card{
     constructor(name, link){
         this._name = name;
         this._link = link;
-        this._temp = document.querySelector('#element-template').content.querySelector('.element').cloneNode(true);
+        this._getView();
         this._temp.querySelector('.element__image').src = this._link;
         this._temp.querySelector('.element__text').textContent = this._name;
-        //console.log(this._temp.querySelector('.element__text').textContent + " " + this._name);
+        console.log(this._temp);
         this._setEvents();
+    }
+
+    _getView(){
+        this._temp = document.querySelector('#element-template').content.querySelector('.element').cloneNode(true);
+
+        return this._temp;
     }
 
     _setEvents(){

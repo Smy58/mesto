@@ -4,6 +4,15 @@ const editButton = document.querySelector(".profile__edit-button");
 const name = document.querySelector('.profile__full-name');
 const describe = document.querySelector('.profile__describe');
 
+
+const inpName = document.getElementById('full-name-input');
+const inpBio = document.getElementById('bio-input');
+
+const inpPostName = document.getElementById('postName-input');
+const inpLink = document.getElementById('postLink-input');
+
+const listOfElements = document.querySelector('.elements');
+
 const initialCards = [
     {
         name: 'Архыз',
@@ -41,25 +50,24 @@ function closePopup(popupElement){
     document.body.removeEventListener('keydown', handleKeyDown);
 }
 
-function handleKeyDown(popupElement){
-    return function(evt){
-        if(evt.key === 'Escape'){
-            closePopup(popupElement);
-        }
+function handleKeyDown(evt){
+    //console.log(evt.key);
+    if(evt.key === 'Escape'){
+        const openedPopup = document.querySelector('.popup_opened');
+        closePopup(openedPopup);
     }
 }
 
 function openPopup(popupElement, allClasses){
     popupElement.classList.add('popup_opened');
-
-    document.body.addEventListener('keydown', handleKeyDown(popupElement));
+    document.body.addEventListener('keydown', handleKeyDown);
 }
 
 function submitEditForm(evt){
     evt.preventDefault();
 
-    name.textContent = document.getElementById('full-name-input').value;
-    describe.textContent = document.getElementById('bio-input').value;
+    name.textContent = inpName.value;
+    describe.textContent = inpBio.value;
 
     closePopup(editForm);
     console.log("close and save");
@@ -82,11 +90,11 @@ function submitAddForm(evt){
     evt.preventDefault();
     console.log("TRUE");
     const item = {
-        name: document.getElementById('postName-input').value,
-        link: document.getElementById('postLink-input').value
+        name: inpPostName.value,
+        link: inpLink.value
     }
 
-    addElement(item, document.querySelector('.elements'));    
+    addElement(item, listOfElements);    
 
     closePopup(addForm);
     console.log("close and save");
@@ -102,8 +110,8 @@ document.querySelectorAll('.popup').forEach(function(item){
 });
 
 editButton.addEventListener('click', function(){
-    document.getElementById('full-name-input').value = name.textContent;
-    document.getElementById('bio-input').value = describe.textContent;
+    inpName.value = name.textContent;
+    inpBio.value = describe.textContent;
     openPopup(editForm, allClasses);
     //refreshValidate(editForm);
     
@@ -117,12 +125,12 @@ editForm.addEventListener('submit', submitEditForm, false);
 
 
 initialCards.forEach(function(item){
-    addElement(item, document.querySelector('.elements'));
+    addElement(item, listOfElements);
 });
 
 addButton.addEventListener('click', function(){
-    document.getElementById('postName-input').value = "";
-    document.getElementById('postLink-input').value = "Не ссылка";
+    inpPostName.value = "";
+    inpLink.value = "Не ссылка";
     openPopup(addForm, allClasses);
     //refreshValidate(addForm);
 });
