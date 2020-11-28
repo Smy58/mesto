@@ -1,4 +1,4 @@
-class FormValidator{
+export default class FormValidator{
   constructor(formElement){
     this._formElement = formElement;
     this._fieldsetList = Array.from(this._formElement.querySelectorAll(allClasses.fieldset));

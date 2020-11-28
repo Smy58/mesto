@@ -1,3 +1,10 @@
+import './../pages/index.css';
+
+import Card from './Card.js';
+import PopupWithForm from './PopupWithForm.js';
+import PopupWithImage from './PopupWithImage.js';
+import Section from './Section.js';
+
 const editForm = document.querySelector('.popup_type_edit-form')
 const editButton = document.querySelector(".profile__edit-button");
 
@@ -12,6 +19,7 @@ const inpPostName = document.getElementById('postName-input');
 const inpLink = document.getElementById('postLink-input');
 
 const listOfElements = document.querySelector('.elements');
+
 
 const initialCards = [
     {
@@ -45,98 +53,65 @@ const addForm = document.querySelector('.popup_type_add-form');
 
 const closeButtonAddForm = addForm.querySelector(".form__close-icon");
 
-function closePopup(popupElement){
-    popupElement.classList.remove('popup_opened');
-    document.body.removeEventListener('keydown', handleKeyDown);
-}
-
-function handleKeyDown(evt){
-    //console.log(evt.key);
-    if(evt.key === 'Escape'){
-        const openedPopup = document.querySelector('.popup_opened');
-        closePopup(openedPopup);
-    }
-}
-
-function openPopup(popupElement, allClasses){
-    popupElement.classList.add('popup_opened');
-    document.body.addEventListener('keydown', handleKeyDown);
-}
-
-function submitEditForm(evt){
-    evt.preventDefault();
-
-    name.textContent = inpName.value;
-    describe.textContent = inpBio.value;
-
-    closePopup(editForm);
-    console.log("close and save");
-}
+const handleCardClick = (link, name) => {
+    const photoForm = new PopupWithImage('.popup_type_photo-form');
+    photoForm.open(link, name);    
+    photoForm.setEventListeners();
+};
 
 
-
-function createElement(item){
-    const card = new Card(item.name, item.link);
-    //console.log(card.returnTemplate());
-    return card.returnTemplate();
-}
-
-function addElement(item, elementsList){
-    elementsList.prepend(createElement(item));
-    //console.log(elementsList);
-}
-
-function submitAddForm(evt){
-    evt.preventDefault();
-    console.log("TRUE");
-    const item = {
-        name: inpPostName.value,
-        link: inpLink.value
-    }
-
-    addElement(item, listOfElements);    
-
-    closePopup(addForm);
-    console.log("close and save");
-}
-
-
-document.querySelectorAll('.popup').forEach(function(item){
-    item.addEventListener('click', function(evt){
-        if(evt.target.classList.contains('popup')){
-            closePopup(item);
-        }
+const submitEditForm = (event, inputValues) => {
+    event.preventDefault();
+    console.log('!!!');
+    console.log(userInfo);
+    userInfo.setUserInfo({
+        name: inputValues.name,
+        describe: inputValues.describe
     });
-});
+
+    console.log("close and save");
+}
+
+const submitAddForm = (event, inputValues) => {
+    event.preventDefault();
+    //console.log(inputValues);
+    const itemNew = {
+        name: inputValues.postName,
+        link: inputValues.postLink
+    }
+    const arr = [itemNew]
+    //console.log(arr);
+    const newCardList = new Section({
+        items: arr,
+        renderer: () => {
+            //console.log('+++++');
+            //console.log(itemNew);
+            const card = new Card(itemNew, handleCardClick);
+            return card.returnTemplate();
+        }
+    }, '.elements');
+    console.log('please');
+}
 
 editButton.addEventListener('click', function(){
-    inpName.value = name.textContent;
-    inpBio.value = describe.textContent;
-    openPopup(editForm, allClasses);
-    //refreshValidate(editForm);
-    
+    const formEdit = new PopupWithForm('.popup_type_edit-form', submitEditForm);
+    formEdit.setEventListeners();
+    formEdit.open();
 });
 
-editForm.querySelector(".form__close-icon").addEventListener('click', function(){
-    closePopup(editForm);
-});
 
-editForm.addEventListener('submit', submitEditForm, false);
-
-
-initialCards.forEach(function(item){
-    addElement(item, listOfElements);
-});
+const cardsList = new Section({
+    items: initialCards,
+    renderer: (item) => {
+        //console.log(item);
+        const card = new Card(item, handleCardClick);
+        return card.returnTemplate();
+    }
+}, '.elements');
 
 addButton.addEventListener('click', function(){
-    inpPostName.value = "";
-    inpLink.value = "Не ссылка";
-    openPopup(addForm, allClasses);
-    //refreshValidate(addForm);
+    //console.log('try1');
+    const formAdd = new PopupWithForm('.popup_type_add-form', submitAddForm);
+    formAdd.setEventListeners();
+    formAdd.open();
 });
-
-closeButtonAddForm.addEventListener('click', function(){
-    closePopup(addForm);
-});
-
-addForm.addEventListener('submit', submitAddForm, false);

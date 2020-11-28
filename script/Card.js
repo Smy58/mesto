@@ -1,12 +1,17 @@
-class Card{
-    constructor(name, link){
-        this._name = name;
-        this._link = link;
+import PopupWithImage from './PopupWithImage.js';
+
+export default class Card{
+    constructor(data, handleCardClick){
+        //console.log('Card data:');
+        //console.log(data);
+        this._name = data.name;
+        this._link = data.link;
+        this._handleCardClick = handleCardClick;
         this._getView();
         this._temp.querySelector('.element__image').src = this._link;
         this._temp.querySelector('.element__text').textContent = this._name;
-        console.log(this._temp);
         this._setEvents();
+
     }
 
     _getView(){
@@ -33,18 +38,8 @@ class Card{
         //Full-size
 
         const fullSizeButton = this._temp.querySelector('.element__button-image');
-
         fullSizeButton.addEventListener('click', () => {
-            const photoForm = document.querySelector('.popup_type_photo-form');
-            openPopup(photoForm, allClasses);
-
-            photoForm.querySelector('.photo-fullsize__image').src = this._link;
-            photoForm.querySelector('.photo-fullsize__describe').textContent = this._name;
-
-            photoForm.querySelector('.photo-fullsize__close-icon').addEventListener('click', function(){
-                closePopup(photoForm);
-            });
-            
+            this._handleCardClick(this._link, this._name);
         });
     }
 
