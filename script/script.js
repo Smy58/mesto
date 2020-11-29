@@ -3,6 +3,7 @@ import './../pages/index.css';
 import Card from './Card.js';
 import PopupWithForm from './PopupWithForm.js';
 import PopupWithImage from './PopupWithImage.js';
+import UserInfo from './UserInfo.js';
 import Section from './Section.js';
 
 const editForm = document.querySelector('.popup_type_edit-form')
@@ -62,8 +63,7 @@ const handleCardClick = (link, name) => {
 
 const submitEditForm = (event, inputValues) => {
     event.preventDefault();
-    console.log('!!!');
-    console.log(userInfo);
+    const userInfo = new UserInfo('.profile__full-name', '.profile__describe');
     userInfo.setUserInfo({
         name: inputValues.name,
         describe: inputValues.describe
@@ -74,13 +74,13 @@ const submitEditForm = (event, inputValues) => {
 
 const submitAddForm = (event, inputValues) => {
     event.preventDefault();
-    //console.log(inputValues);
     const itemNew = {
         name: inputValues.postName,
         link: inputValues.postLink
     }
     const arr = [itemNew]
-    //console.log(arr);
+    console.log("_____________");
+    console.log(arr);
     const newCardList = new Section({
         items: arr,
         renderer: () => {
@@ -93,9 +93,9 @@ const submitAddForm = (event, inputValues) => {
     console.log('please');
 }
 
+const formEdit = new PopupWithForm('.popup_type_edit-form', submitEditForm);
+formEdit.setEventListeners();
 editButton.addEventListener('click', function(){
-    const formEdit = new PopupWithForm('.popup_type_edit-form', submitEditForm);
-    formEdit.setEventListeners();
     formEdit.open();
 });
 
@@ -109,9 +109,9 @@ const cardsList = new Section({
     }
 }, '.elements');
 
+const formAdd = new PopupWithForm('.popup_type_add-form', submitAddForm);
+formAdd.setEventListeners();
 addButton.addEventListener('click', function(){
     //console.log('try1');
-    const formAdd = new PopupWithForm('.popup_type_add-form', submitAddForm);
-    formAdd.setEventListeners();
     formAdd.open();
 });

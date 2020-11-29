@@ -4,21 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mesto</title>
-    <!--<link rel="stylesheet" type="text/css" href="./pages/index.css">-->
+    <!--link rel="stylesheet" type="text/css" href="./pages/index.css"-->
 </head>
 <body class="page">
     <header class="header">
         <img src="<%=require('./images/logo.svg')%>" alt="Логотип" class="logo">
+        <!--<img src="./images/logo.svg" alt="Логотип" class="logo">-->
     </header>
     <main>
         <div class="profile">
             <div class="profile__left-items">
-                <img src="<%=require('./images/avatar.jpg')%>" class="profile__avatar" alt="Аватар"/>
+                <img src="<%=require('./images/avatar.jpg')%>" class="profile__avatar" alt="Аватар">
+                <!--<img src="./images/avatar.jpg" class="profile__avatar" alt="Аватар">-->
                 <div class="profile__info">
                     <div class="profile__text">
                         <h2 class="profile__full-name">Жак-Ив Кусто</h2>
                         <button class="profile__edit-button" type="button">
-                            <img src="<%=require('./images/Ручка.svg')%>" alt="Ручка">                    
+                            <img src="<%=require('./images/Ручка.svg')%>" alt="Ручка">
+                            <!--<img src="./images/Ручка.svg" alt="Ручка">-->
                         </button>
                     </div>
                     <p class="profile__describe">Исследователь океана</p>
@@ -26,6 +29,7 @@
             </div>
             <button class="profile__add-button" type="button">
                 <img src="<%=require('./images/plus.svg')%>" alt="Плюс">
+                <!--<img src="./images/plus.svg" alt="Плюс">-->
             </button>
         </div>
         <div class="elements">
@@ -40,6 +44,7 @@
     <div class="popup popup_type_edit-form">
         <form class="form form_type_edit" name="bio" novalidate>
             <button class="form__close-button popup__close-button" type="button">
+                <!--<img src="./images/Close-Icon.svg" alt="Закрыть" class="form__close-icon">-->
                 <img src="<%=require('./images/Close-Icon.svg')%>" alt="Закрыть" class="form__close-icon">
             </button>
             <h3 class="form__title">Редактировать профиль</h3>
@@ -60,6 +65,7 @@
     <div class="popup popup_type_add-form">
         <form class="form form_type_add" name="add" novalidate>
             <button class="form__close-button popup__close-button" type="button">
+                <!--img src="./images/Close-Icon.svg" alt="Закрыть" class="form__close-icon"-->
                 <img src="<%=require('./images/Close-Icon.svg')%>" alt="Закрыть" class="form__close-icon">
             </button>
             <h3 class="form__title">Новое место</h3>
@@ -81,6 +87,7 @@
         <div class="photo-fullsize" novalidate>
             <button class="photo-fullsize__close-button popup__close-button" type="button">
                 <img src="<%=require('./images/Close-Icon.svg')%>" alt="Закрыть" class="photo-fullsize__close-icon">
+                <!--img src="./images/Close-Icon.svg" alt="Закрыть" class="photo-fullsize__close-icon"-->
             </button>
             <img class="photo-fullsize__image" src="" alt="Картина полный размер">
             <h3 class="photo-fullsize__describe">Архыз</h3>
@@ -94,6 +101,7 @@
             </button>
             <button class="element__trash" type="button">
                 <img src="<%=require('./images/Trash.svg')%>" alt="Мусорка">
+                <!--img src="./images/Trash.svg" alt="Мусорка"-->
             </button>
             <div class="element__describe">
                 <h3 class="element__text"></h3>
@@ -101,5 +109,6 @@
             </div>
         </div>
     </template>
+    <!--script type='module' src='./script/script.js'></script-->
 </body>
 </html>
