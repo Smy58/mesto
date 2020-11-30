@@ -1,16 +1,16 @@
 export default class FormValidator{
-  constructor(formElement){
+  constructor(formElement, allClasses){
     this._formElement = formElement;
-    this._fieldsetList = Array.from(this._formElement.querySelectorAll(allClasses.fieldset));
-    this._setEvents();
+    this._allClasses = allClasses;
+    this._fieldsetList = Array.from(this._formElement.querySelectorAll(this._allClasses.fieldset));
   }
 
-  _setEvents(){
+  setEvents(){
     this._formElement.addEventListener('submit', (evt) => {
       evt.preventDefault();
     });
     this._fieldsetList.forEach((fieldset) => {
-      this._setEventListeners(fieldset, allClasses);
+      this._setEventListeners(fieldset, this._allClasses);
     });
   }
 
@@ -23,16 +23,20 @@ export default class FormValidator{
         this._checkInputValidity(formElement, inputElement, allClasses);
         this._toggleButtonState(this._inputList, this._thisbuttonElement, allClasses);
       });
+      this._checkInputValidity(formElement, inputElement, allClasses);
+      this._toggleButtonState(this._inputList, this._thisbuttonElement, allClasses);
     });
   };
 
   _toggleButtonState(inputList, buttonElement, allClasses){
-    console.log(" che che1 " + allClasses.submitButtonDisabled);
+    //console.log(" che che1 " + allClasses.submitButtonDisabled);
     if(this._hasInvalidInput(inputList)){
       //console.log(buttonElement);
       this._buttonElement.classList.add(allClasses.submitButtonDisabled);
+      this._buttonElement.disabled = true;
     }else{
       this._buttonElement.classList.remove(allClasses.submitButtonDisabled);
+      this._buttonElement.disabled = false;
     }
   }
 
@@ -54,7 +58,7 @@ export default class FormValidator{
   _showInputError(formElement, inputElement, errorMessage, allClasses){
     this._errorElement = formElement.querySelector(`#${inputElement.id}-error`);
     inputElement.classList.add(allClasses.inputTypeError);
-    console.log(inputElement.id);
+    //console.log(inputElement.id);
     this._errorElement.textContent = errorMessage;
     this._errorElement.classList.add(allClasses.errorText);
   };
@@ -67,23 +71,3 @@ export default class FormValidator{
   };
 }
 
-const allClasses = {
-    form: '.form',
-    fieldset: '.form__set',
-    input: '.form__input',
-    submitButton: '.form__submit',
-    submitButtonDisabled: 'form__submit_inactive',
-    inputTypeError: 'form__input_type_error',
-    errorText: 'form__input-error_active'
-}
-
-
-const enableValidation = (allClasses) => {
-  const formList = Array.from(document.querySelectorAll(allClasses.form));
-  formList.forEach((formElement) => {
-    const formvalidate = new FormValidator(formElement);
-    
-  });
-};
-
-enableValidation(allClasses);

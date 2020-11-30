@@ -1,10 +1,11 @@
-import './../pages/index.css';
+import './index.css';
 
-import Card from './Card.js';
-import PopupWithForm from './PopupWithForm.js';
-import PopupWithImage from './PopupWithImage.js';
-import UserInfo from './UserInfo.js';
-import Section from './Section.js';
+import Card from '../components/Card.js';
+import PopupWithForm from '../components/PopupWithForm.js';
+import PopupWithImage from '../components/PopupWithImage.js';
+import UserInfo from '../components/UserInfo.js';
+import Section from '../components/Section.js';
+import FormValidator from '../components/FormValidator.js';
 
 const editForm = document.querySelector('.popup_type_edit-form')
 const editButton = document.querySelector(".profile__edit-button");
@@ -20,6 +21,27 @@ const inpPostName = document.getElementById('postName-input');
 const inpLink = document.getElementById('postLink-input');
 
 const listOfElements = document.querySelector('.elements');
+
+export const allClasses = {
+    form: '.form',
+    fieldset: '.form__set',
+    input: '.form__input',
+    submitButton: '.form__submit',
+    submitButtonDisabled: 'form__submit_inactive',
+    inputTypeError: 'form__input_type_error',
+    errorText: 'form__input-error_active'
+}
+
+
+const enableValidation = (allClasses) => {
+  const formList = Array.from(document.querySelectorAll(allClasses.form));
+  formList.forEach((formElement) => {
+    const formvalidate = new FormValidator(formElement, allClasses);
+    formvalidate.setEvents();
+  });
+};
+
+enableValidation(allClasses);
 
 
 const initialCards = [
@@ -54,51 +76,15 @@ const addForm = document.querySelector('.popup_type_add-form');
 
 const closeButtonAddForm = addForm.querySelector(".form__close-icon");
 
+const userInfo = new UserInfo('.profile__full-name', '.profile__describe');
+userInfo.setUserInfo(userInfo.getUserInfo());
+
+const photoForm = new PopupWithImage('.popup_type_photo-form');
+photoForm.setEventListeners();
+
 const handleCardClick = (link, name) => {
-    const photoForm = new PopupWithImage('.popup_type_photo-form');
-    photoForm.open(link, name);    
-    photoForm.setEventListeners();
+    photoForm.open(link, name);
 };
-
-
-const submitEditForm = (event, inputValues) => {
-    event.preventDefault();
-    const userInfo = new UserInfo('.profile__full-name', '.profile__describe');
-    userInfo.setUserInfo({
-        name: inputValues.name,
-        describe: inputValues.describe
-    });
-
-    console.log("close and save");
-}
-
-const submitAddForm = (event, inputValues) => {
-    event.preventDefault();
-    const itemNew = {
-        name: inputValues.postName,
-        link: inputValues.postLink
-    }
-    const arr = [itemNew]
-    console.log("_____________");
-    console.log(arr);
-    const newCardList = new Section({
-        items: arr,
-        renderer: () => {
-            //console.log('+++++');
-            //console.log(itemNew);
-            const card = new Card(itemNew, handleCardClick);
-            return card.returnTemplate();
-        }
-    }, '.elements');
-    console.log('please');
-}
-
-const formEdit = new PopupWithForm('.popup_type_edit-form', submitEditForm);
-formEdit.setEventListeners();
-editButton.addEventListener('click', function(){
-    formEdit.open();
-});
-
 
 const cardsList = new Section({
     items: initialCards,
@@ -108,9 +94,53 @@ const cardsList = new Section({
         return card.returnTemplate();
     }
 }, '.elements');
+cardsList.renderItems();
 
-const formAdd = new PopupWithForm('.popup_type_add-form', submitAddForm);
+
+const submitEditForm = (event, inputValues) => {
+    event.preventDefault();
+    
+    userInfo.setUserInfo({
+        name: inputValues.name,
+        describe: inputValues.bio
+    });
+
+    //console.log("close and save");
+}
+
+const submitAddForm = (event, inputValues) => {
+    event.preventDefault();
+    const itemNew = {
+        name: inputValues.postName,
+        link: inputValues.postLink
+    }
+    
+    const card = new Card(item, handleCardClick);
+ 
+    //console.log('please');
+    cardsList.addItem(card.returnTemplate);
+}
+
+const setValuesEdit = () => {
+    //console.log(userInfo.getUserInfo.name);
+    document.getElementById('full-name-input').value = userInfo.getUserInfo().name;
+    document.getElementById('bio-input').value = userInfo.getUserInfo().describe;
+};
+
+const formEdit = new PopupWithForm('.popup_type_edit-form', submitEditForm, setValuesEdit);
+formEdit.setEventListeners();
+editButton.addEventListener('click', function(){
+    formEdit.open();
+});
+
+
+const setValuesAdd = () => {
+    document.getElementById('postName-input').value = "";
+    document.getElementById('postLink-input').value = "Не ссылка";
+};
+const formAdd = new PopupWithForm('.popup_type_add-form', submitAddForm, setValuesAdd);
 formAdd.setEventListeners();
+
 addButton.addEventListener('click', function(){
     //console.log('try1');
     formAdd.open();

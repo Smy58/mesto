@@ -1,5 +1,3 @@
-import PopupWithImage from './PopupWithImage.js';
-
 export default class Card{
     constructor(data, handleCardClick){
         //console.log('Card data:');
@@ -10,6 +8,7 @@ export default class Card{
         this._getView();
         this._temp.querySelector('.element__image').src = this._link;
         this._temp.querySelector('.element__text').textContent = this._name;
+        this._temp.querySelector('.element__image').alt = "Картинка";
         this._setEvents();
 
     }
