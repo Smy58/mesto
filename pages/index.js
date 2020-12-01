@@ -115,10 +115,10 @@ const submitAddForm = (event, inputValues) => {
         link: inputValues.postLink
     }
     
-    const card = new Card(item, handleCardClick);
+    const card = new Card(itemNew, handleCardClick);
  
-    //console.log('please');
-    cardsList.addItem(card.returnTemplate);
+    //console.log(card.);
+    cardsList.addItem(card.returnTemplate());
 }
 
 const setValuesEdit = () => {
