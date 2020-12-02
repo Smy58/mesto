@@ -136,7 +136,7 @@ editButton.addEventListener('click', function(){
 
 const setValuesAdd = () => {
     document.getElementById('postName-input').value = "";
-    document.getElementById('postLink-input').value = "Не ссылка";
+    document.getElementById('postLink-input').value = "";
 };
 const formAdd = new PopupWithForm('.popup_type_add-form', submitAddForm, setValuesAdd);
 formAdd.setEventListeners();

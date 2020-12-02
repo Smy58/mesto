@@ -6,9 +6,10 @@ export default class Card{
         this._link = data.link;
         this._handleCardClick = handleCardClick;
         this._getView();
-        this._temp.querySelector('.element__image').src = this._link;
+        this._elementImage = this._temp.querySelector('.element__image');
+        this._elementImage.src = this._link;
         this._temp.querySelector('.element__text').textContent = this._name;
-        this._temp.querySelector('.element__image').alt = "Картинка";
+        this._elementImage.alt = "Картинка";
         this._setEvents();
 
     }
