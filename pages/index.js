@@ -1,4 +1,4 @@
-import './index.css';
+//import './index.css';
 
 import Card from '../components/Card.js';
 import PopupWithForm from '../components/PopupWithForm.js';
@@ -104,7 +104,7 @@ const submitEditForm = (event, inputValues) => {
         name: inputValues.name,
         describe: inputValues.bio
     });
-
+    alert('MOLODEC');
     //console.log("close and save");
 }
 
