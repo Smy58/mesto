@@ -6,21 +6,9 @@ import PopupWithImage from '../components/PopupWithImage.js';
 import UserInfo from '../components/UserInfo.js';
 import Section from '../components/Section.js';
 import FormValidator from '../components/FormValidator.js';
+import Api from '../components/Api.js';
 
-const editForm = document.querySelector('.popup_type_edit-form')
 const editButton = document.querySelector(".profile__edit-button");
-
-const name = document.querySelector('.profile__full-name');
-const describe = document.querySelector('.profile__describe');
-
-
-const inpName = document.getElementById('full-name-input');
-const inpBio = document.getElementById('bio-input');
-
-const inpPostName = document.getElementById('postName-input');
-const inpLink = document.getElementById('postLink-input');
-
-const listOfElements = document.querySelector('.elements');
 
 export const allClasses = {
     form: '.form',
@@ -44,7 +32,9 @@ const enableValidation = (allClasses) => {
 enableValidation(allClasses);
 
 
-const initialCards = [
+
+
+/*const initialCards = [
     {
         name: 'Архыз',
         link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
@@ -69,7 +59,7 @@ const initialCards = [
         name: 'Байкал',
         link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
     }
-];
+];*/
 
 const addButton = document.querySelector(".profile__add-button");
 const addForm = document.querySelector('.popup_type_add-form');
@@ -82,43 +72,108 @@ userInfo.setUserInfo(userInfo.getUserInfo());
 const photoForm = new PopupWithImage('.popup_type_photo-form');
 photoForm.setEventListeners();
 
+
 const handleCardClick = (link, name) => {
     photoForm.open(link, name);
 };
 
+
+const handleDeleteCardClick = (post) => {
+    const submitDelete = (event) => {
+        event.preventDefault();
+        post.remove();
+    }
+    
+    const deleteForm = new PopupWithForm('.popup_type_delete-form', submitDelete, () => {});
+    deleteForm.setEventListeners();
+    deleteForm.open();
+}
+
 const cardsList = new Section({
-    items: initialCards,
+    items: [],
     renderer: (item) => {
         //console.log(item);
-        const card = new Card(item, handleCardClick);
+        const card = new Card(item, handleCardClick, handleDeleteCardClick);
         return card.returnTemplate();
     }
 }, '.elements');
 cardsList.renderItems();
 
+const apiUser = new Api({
+    baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-20',
+    headers: {
+      authorization: 'e5d9a431-fbb1-4062-9884-1c501cbe22b4',
+      'Content-Type': 'application/json'
+    }
+  });
 
-const submitEditForm = (event, inputValues) => {
+apiUser.getFetch()
+    .then((result) => {
+        document.querySelector('.profile__full-name').textContent = result.name;
+        document.querySelector('.profile__describe').textContent = result.about;
+        document.getElementById('full-name-input').value = result.name;
+        document.getElementById('bio-input').value = result.about;
+        document.querySelector('.profile__avatar').src = result.avatar;
+    })
+    .catch((err) => {
+        console.log(`Ошибка: ${err}`);
+    })
+
+const list = new Section({
+    items: [],
+    renderer: (item) => {
+        const card = new Card(item, handleCardClick, handleDeleteCardClick);
+        return card.returnTemplate();
+    }
+}, '.elements');
+
+apiUser.getInitialCards()
+    .then((data) => {
+    console.log(data);
+    const newList = new Section({
+        items: data,
+        renderer: (item) => {
+            const card = new Card(item, handleCardClick, handleDeleteCardClick);
+            return card.returnTemplate();
+        }
+    }, '.elements');
+    newList.renderItems();
+})
+
+
+const submitEditForm = (event, inputValues, submitElement) => {
     event.preventDefault();
-    
+    submitElement.textContent = "Сохранение...";
     userInfo.setUserInfo({
         name: inputValues.name,
         describe: inputValues.bio
     });
-    alert('MOLODEC');
-    //console.log("close and save");
+    return apiUser.getFetchPatch('/users/me', JSON.stringify({
+        name: inputValues.name,
+        about: inputValues.bio
+    }));
+    
 }
 
-const submitAddForm = (event, inputValues) => {
-    event.preventDefault();
-    const itemNew = {
+const submitAddForm = (event, inputValues, submitElement) => {
+    event.preventDefault();    
+    submitElement.textContent = "Сохранение...";
+    return apiUser.getFetchPost('/cards', JSON.stringify({
         name: inputValues.postName,
         link: inputValues.postLink
-    }
-    
-    const card = new Card(itemNew, handleCardClick);
- 
+    }))
+    .then((data) => {
+        return new Card(data, handleCardClick, handleDeleteCardClick);
+    })
+    .then((card) => {
+        cardsList.addItem(card.returnTemplate());
+    })
+    .catch((err) => {
+        console.log(`Ошибка: ${err}`);
+    })
+
     //console.log(card.);
-    cardsList.addItem(card.returnTemplate());
+    
 }
 
 const setValuesEdit = () => {
@@ -145,3 +200,26 @@ addButton.addEventListener('click', function(){
     //console.log('try1');
     formAdd.open();
 });
+
+
+
+const ava = document.querySelector('.profile__avatar');
+const submitAvatarForm = (event, inputValues, submitElement) => {
+    event.preventDefault();
+    submitElement.textContent = "Сохранение...";
+    const newLink = inputValues.avatarLink;
+    document.querySelector('.profile__avatar').src = newLink;
+    return apiUser.getFetchPatch('/users/me/avatar', JSON.stringify({
+        avatar: newLink
+    }));
+};
+const setValuesAvatar = () => {
+    document.getElementById('avatarLink-input').value = "";
+};
+
+const avatarButton = document.querySelector('.profile__avatar-cover');
+const formAvatar = new PopupWithForm('.popup_type_avatar-form', submitAvatarForm, setValuesAvatar);
+formAvatar.setEventListeners();
+avatarButton.addEventListener('click', () => {
+    formAvatar.open();
+})

@@ -16,6 +16,7 @@
     color: #FFFFFF;
 
     cursor: pointer;
+    margin-top: 38px;
 }
 
 .form__submit:focus{

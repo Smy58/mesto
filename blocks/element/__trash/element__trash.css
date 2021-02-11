@@ -6,6 +6,7 @@
     background-color: transparent;
     border: none;
     cursor: pointer;
+    display: none;
 }
 
 .element__trash:focus{

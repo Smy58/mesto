@@ -14,8 +14,13 @@
     <main>
         <div class="profile">
             <div class="profile__left-items">
-                <!--img src="<%=require('./images/avatar.jpg')%>" class="profile__avatar" alt="Аватар"-->
-                <img src="./images/avatar.jpg" class="profile__avatar" alt="Аватар">
+                <div class="profile__avatar-container">
+                    <!--img src="<%=require('./images/avatar.jpg')%>" class="profile__avatar" alt="Аватар"-->
+                    <img src="./images/avatar.jpg" class="profile__avatar" alt="Аватар">
+                    <button class="profile__avatar-cover">
+                        <img src="./images/Big.svg" alt="Большая ручка">
+                    </button>
+                </div>
                 <div class="profile__info">
                     <div class="profile__text">
                         <h2 class="profile__full-name">Жак-Ив Кусто</h2>
@@ -94,6 +99,36 @@
         </div>
     </div>
 
+    <div class="popup popup_type_delete-form">
+        <form class="form form_type_delete" name="delete" novalidate>
+            <button class="form__close-button popup__close-button" type="button">
+                <img src="./images/Close-Icon.svg" alt="Закрыть" class="form__close-icon">
+                <!--img src="<%=require('./images/Close-Icon.svg')%>" alt="Закрыть" class="form__close-icon"-->
+            </button>
+            <h3 class="form__title">Вы уверены?</h3>
+            <fieldset class="form__set">
+                <button class="form__submit" type="submit">Да</button>
+            </fieldset>
+        </form>
+    </div>
+
+    <div class="popup popup_type_avatar-form">
+        <form class="form form_type_avatar" name="avatar" novalidate>
+            <button class="form__close-button popup__close-button" type="button">
+                <img src="./images/Close-Icon.svg" alt="Закрыть" class="form__close-icon">
+                <!--img src="<%=require('./images/Close-Icon.svg')%>" alt="Закрыть" class="form__close-icon"-->
+            </button>
+            <h3 class="form__title">Обновить аватар</h3>
+            <fieldset class="form__set">
+                <label class="form__field">
+                    <input id="avatarLink-input" name="avatarLink" class="form__input" type="url" placeholder="Ссылка на картинку" required>
+                    <span class='form__input-error' id='avatarLink-input-error'></span>
+                </label>
+                <button class="form__submit" type="submit">Сохранить</button>
+            </fieldset>
+        </form>
+    </div>
+
     <template id="element-template">
         <div class="element">
             <button class="element__button-image">
@@ -105,7 +140,11 @@
             </button>
             <div class="element__describe">
                 <h3 class="element__text"></h3>
-                <button class="element__like-button" type="button"></button>  
+                <div class="element__like-group">
+                    <button class="element__like-button" type="button"></button>
+                    <p class="element__like-number">0</p>
+                </div>
+                  
             </div>
         </div>
     </template>
