@@ -15,6 +15,14 @@ export default class Api{
             method: 'POST',
             headers: options.headers
         };
+        this._headersPut ={
+            method: 'PUT',
+            headers: options.headers
+        };
+        this._headersDelete ={
+            method: 'DELETE',
+            headers: options.headers
+        };
     }
 
     getFetch(){
@@ -42,6 +50,16 @@ export default class Api{
     getFetchPost(st, body){
         this._headersPost.body = body;
         return fetch(this._baseUrl + st, this._headersPost)
+            .then(res => res.json());
+    }
+
+    getFetchPut(st){
+        return fetch(this._baseUrl + st, this._headersPut)
+            .then(res => res.json());
+    }
+
+    getFetchDelete(st){
+        return fetch(this._baseUrl + st, this._headersDelete)
             .then(res => res.json());
     }
 }

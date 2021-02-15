@@ -33,40 +33,12 @@ enableValidation(allClasses);
 
 
 
-
-/*const initialCards = [
-    {
-        name: 'Архыз',
-        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
-    },
-    {
-        name: 'Челябинская область',
-        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
-    },
-    {
-        name: 'Иваново',
-        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
-    },
-    {
-        name: 'Камчатка',
-        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
-    },
-    {
-        name: 'Холмогорский район',
-        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
-    },
-    {
-        name: 'Байкал',
-        link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
-    }
-];*/
-
 const addButton = document.querySelector(".profile__add-button");
 const addForm = document.querySelector('.popup_type_add-form');
 
 const closeButtonAddForm = addForm.querySelector(".form__close-icon");
 
-const userInfo = new UserInfo('.profile__full-name', '.profile__describe');
+const userInfo = new UserInfo('.profile__full-name', '.profile__describe', 'full-name-input', 'bio-input');
 userInfo.setUserInfo(userInfo.getUserInfo());
 
 const photoForm = new PopupWithImage('.popup_type_photo-form');
@@ -77,27 +49,58 @@ const handleCardClick = (link, name) => {
     photoForm.open(link, name);
 };
 
+const deleteForm = new PopupWithForm('.popup_type_delete-form', () => {}, () => {});
 
-const handleDeleteCardClick = (post) => {
-    const submitDelete = (event) => {
+const handleDeleteCardClick = (post, id) => {
+    const submitDelete = (event, inputValues, submitElement) => {
         event.preventDefault();
         post.remove();
+        submitElement.textContent = "Сохранение...";
+        return apiUser.getFetchDelete('/cards/' + id)
+            .then(res => {
+                if (res.ok) {
+                return res.json();
+                }
+        
+                return Promise.reject(`Ошибка: ${res.status}`);
+            })
+            .then((data) => {
+                console.log(data);
+            })
     }
     
-    const deleteForm = new PopupWithForm('.popup_type_delete-form', submitDelete, () => {});
+    deleteForm.setSubmitForm(submitDelete);
     deleteForm.setEventListeners();
     deleteForm.open();
+}
+const handlePut = (st) => {
+    return apiUser.getFetchPut(st);
+}
+
+const handleDelete = (st) => {
+    return apiUser.getFetchDelete(st);
+}
+
+const cardFetch = () => {
+    return apiUser.getFetch();
+}
+
+const createCard = (item) => {
+    return new Card(item, handleCardClick, handleDeleteCardClick, handlePut, handleDelete, cardFetch);
 }
 
 const cardsList = new Section({
     items: [],
     renderer: (item) => {
-        //console.log(item);
-        const card = new Card(item, handleCardClick, handleDeleteCardClick);
+        const card = createCard(item);
         return card.returnTemplate();
     }
 }, '.elements');
 cardsList.renderItems();
+
+const setValuesEdit = () => {
+    return userInfo.setInputInfo();
+};
 
 const apiUser = new Api({
     baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-20',
@@ -109,36 +112,21 @@ const apiUser = new Api({
 
 apiUser.getFetch()
     .then((result) => {
-        document.querySelector('.profile__full-name').textContent = result.name;
-        document.querySelector('.profile__describe').textContent = result.about;
-        document.getElementById('full-name-input').value = result.name;
-        document.getElementById('bio-input').value = result.about;
+        userInfo.setUserInfo(result);
         document.querySelector('.profile__avatar').src = result.avatar;
     })
     .catch((err) => {
         console.log(`Ошибка: ${err}`);
-    })
-
-const list = new Section({
-    items: [],
-    renderer: (item) => {
-        const card = new Card(item, handleCardClick, handleDeleteCardClick);
-        return card.returnTemplate();
-    }
-}, '.elements');
+    });
 
 apiUser.getInitialCards()
     .then((data) => {
     console.log(data);
-    const newList = new Section({
-        items: data,
-        renderer: (item) => {
-            const card = new Card(item, handleCardClick, handleDeleteCardClick);
-            return card.returnTemplate();
-        }
-    }, '.elements');
-    newList.renderItems();
-})
+    data.forEach((item) => {
+        const card  = createCard(item);
+        cardsList.addItem(card.returnTemplate())
+    });
+});
 
 
 const submitEditForm = (event, inputValues, submitElement) => {
@@ -146,7 +134,7 @@ const submitEditForm = (event, inputValues, submitElement) => {
     submitElement.textContent = "Сохранение...";
     userInfo.setUserInfo({
         name: inputValues.name,
-        describe: inputValues.bio
+        about: inputValues.bio
     });
     return apiUser.getFetchPatch('/users/me', JSON.stringify({
         name: inputValues.name,
@@ -163,7 +151,8 @@ const submitAddForm = (event, inputValues, submitElement) => {
         link: inputValues.postLink
     }))
     .then((data) => {
-        return new Card(data, handleCardClick, handleDeleteCardClick);
+        console.log(data);
+        return createCard(data);
     })
     .then((card) => {
         cardsList.addItem(card.returnTemplate());
@@ -175,12 +164,6 @@ const submitAddForm = (event, inputValues, submitElement) => {
     //console.log(card.);
     
 }
-
-const setValuesEdit = () => {
-    //console.log(userInfo.getUserInfo.name);
-    document.getElementById('full-name-input').value = userInfo.getUserInfo().name;
-    document.getElementById('bio-input').value = userInfo.getUserInfo().describe;
-};
 
 const formEdit = new PopupWithForm('.popup_type_edit-form', submitEditForm, setValuesEdit);
 formEdit.setEventListeners();
