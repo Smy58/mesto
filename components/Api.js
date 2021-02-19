@@ -60,6 +60,15 @@ export default class Api{
 
     getFetchDelete(st){
         return fetch(this._baseUrl + st, this._headersDelete)
-            .then(res => res.json());
+            .then(res => {
+                if (res.ok) {
+                return res.json();
+                }
+        
+                return Promise.reject(`Ошибка: ${res.status}`);
+            })
+            .then((data) => {
+                console.log(data);
+            })
     }
 }

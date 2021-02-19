@@ -38,7 +38,7 @@ const addForm = document.querySelector('.popup_type_add-form');
 
 const closeButtonAddForm = addForm.querySelector(".form__close-icon");
 
-const userInfo = new UserInfo('.profile__full-name', '.profile__describe', 'full-name-input', 'bio-input');
+const userInfo = new UserInfo('.profile__full-name', '.profile__describe', 'full-name-input', 'bio-input', '.profile__avatar', 'avatarLink-input');
 userInfo.setUserInfo(userInfo.getUserInfo());
 
 const photoForm = new PopupWithImage('.popup_type_photo-form');
@@ -50,27 +50,17 @@ const handleCardClick = (link, name) => {
 };
 
 const deleteForm = new PopupWithForm('.popup_type_delete-form', () => {}, () => {});
+deleteForm.setEventListeners();
 
 const handleDeleteCardClick = (post, id) => {
     const submitDelete = (event, inputValues, submitElement) => {
         event.preventDefault();
         post.remove();
         submitElement.textContent = "Сохранение...";
-        return apiUser.getFetchDelete('/cards/' + id)
-            .then(res => {
-                if (res.ok) {
-                return res.json();
-                }
-        
-                return Promise.reject(`Ошибка: ${res.status}`);
-            })
-            .then((data) => {
-                console.log(data);
-            })
+        return apiUser.getFetchDelete('/cards/' + id);
     }
     
     deleteForm.setSubmitForm(submitDelete);
-    deleteForm.setEventListeners();
     deleteForm.open();
 }
 const handlePut = (st) => {
@@ -113,7 +103,6 @@ const apiUser = new Api({
 apiUser.getFetch()
     .then((result) => {
         userInfo.setUserInfo(result);
-        document.querySelector('.profile__avatar').src = result.avatar;
     })
     .catch((err) => {
         console.log(`Ошибка: ${err}`);
@@ -126,20 +115,27 @@ apiUser.getInitialCards()
         const card  = createCard(item);
         cardsList.addItem(card.returnTemplate())
     });
+})
+.catch((err) => {
+    console.log(err);
 });
 
 
 const submitEditForm = (event, inputValues, submitElement) => {
     event.preventDefault();
     submitElement.textContent = "Сохранение...";
-    userInfo.setUserInfo({
-        name: inputValues.name,
-        about: inputValues.bio
-    });
+
     return apiUser.getFetchPatch('/users/me', JSON.stringify({
         name: inputValues.name,
         about: inputValues.bio
-    }));
+    }))
+        .then(() => {
+            userInfo.setUserInfo({
+                name: inputValues.name,
+                about: inputValues.bio,
+                avatar: document.querySelector('.profile__avatar').src
+            });
+        });
     
 }
 
@@ -172,11 +168,7 @@ editButton.addEventListener('click', function(){
 });
 
 
-const setValuesAdd = () => {
-    document.getElementById('postName-input').value = "";
-    document.getElementById('postLink-input').value = "";
-};
-const formAdd = new PopupWithForm('.popup_type_add-form', submitAddForm, setValuesAdd);
+const formAdd = new PopupWithForm('.popup_type_add-form', submitAddForm);
 formAdd.setEventListeners();
 
 addButton.addEventListener('click', function(){
@@ -185,23 +177,25 @@ addButton.addEventListener('click', function(){
 });
 
 
-
-const ava = document.querySelector('.profile__avatar');
 const submitAvatarForm = (event, inputValues, submitElement) => {
     event.preventDefault();
     submitElement.textContent = "Сохранение...";
-    const newLink = inputValues.avatarLink;
-    document.querySelector('.profile__avatar').src = newLink;
+    
     return apiUser.getFetchPatch('/users/me/avatar', JSON.stringify({
-        avatar: newLink
-    }));
-};
-const setValuesAvatar = () => {
-    document.getElementById('avatarLink-input').value = "";
+        avatar: inputValues.avatarLink
+    }))
+        .then(() => {
+            userInfo.setUserInfo({
+                name: document.querySelector('.profile__full-name').textContent,
+                about: document.querySelector('.profile__describe').textContent,
+                avatar: inputValues.avatarLink
+            });
+        });
+
 };
 
 const avatarButton = document.querySelector('.profile__avatar-cover');
-const formAvatar = new PopupWithForm('.popup_type_avatar-form', submitAvatarForm, setValuesAvatar);
+const formAvatar = new PopupWithForm('.popup_type_avatar-form', submitAvatarForm);
 formAvatar.setEventListeners();
 avatarButton.addEventListener('click', () => {
     formAvatar.open();

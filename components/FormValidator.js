@@ -17,14 +17,20 @@ export default class FormValidator{
   _setEventListeners(formElement, allClasses){
     this._inputList = Array.from(formElement.querySelectorAll(allClasses.input));
     this._buttonElement = formElement.querySelector(allClasses.submitButton);
-    this._toggleButtonState(this._inputList, this._buttonElement, allClasses);
+    formElement.addEventListener('reset', () => {
+      this._inputList.forEach((inputElement) => {
+        this._hideInputError(formElement, inputElement, allClasses);
+        this._toggleButtonState( this._inputList, this._buttonElement, allClasses);
+      })
+    });
+
     this._inputList.forEach((inputElement) => {
       inputElement.addEventListener('input', () => {
         this._checkInputValidity(formElement, inputElement, allClasses);
         this._toggleButtonState(this._inputList, this._thisbuttonElement, allClasses);
       });
       this._checkInputValidity(formElement, inputElement, allClasses);
-      this._toggleButtonState(this._inputList, this._thisbuttonElement, allClasses);
+      this._toggleButtonState(this._inputList, this._buttonElement, allClasses);
     });
   };
 
