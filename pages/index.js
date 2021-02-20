@@ -129,12 +129,12 @@ const submitEditForm = (event, inputValues, submitElement) => {
         name: inputValues.name,
         about: inputValues.bio
     }))
-        .then(() => {
-            userInfo.setUserInfo({
-                name: inputValues.name,
-                about: inputValues.bio,
-                avatar: document.querySelector('.profile__avatar').src
-            });
+        .then((userData) => {
+            //console.log(userData);
+            userInfo.setUserInfo(userData);
+        })
+        .catch((err) => {
+            console.log(err);
         });
     
 }
@@ -147,7 +147,7 @@ const submitAddForm = (event, inputValues, submitElement) => {
         link: inputValues.postLink
     }))
     .then((data) => {
-        console.log(data);
+        //console.log(data);
         return createCard(data);
     })
     .then((card) => {
@@ -184,12 +184,11 @@ const submitAvatarForm = (event, inputValues, submitElement) => {
     return apiUser.getFetchPatch('/users/me/avatar', JSON.stringify({
         avatar: inputValues.avatarLink
     }))
-        .then(() => {
-            userInfo.setUserInfo({
-                name: document.querySelector('.profile__full-name').textContent,
-                about: document.querySelector('.profile__describe').textContent,
-                avatar: inputValues.avatarLink
-            });
+        .then((userData) => {
+            userInfo.setUserInfo(userData);
+        })
+        .catch((err) => {
+            console.log(err);
         });
 
 };
